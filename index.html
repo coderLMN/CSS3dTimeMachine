@@ -40,7 +40,7 @@
 
 		    function add(n){	// put a new item
         		if(! data[n]){
-		            data.push(new Item(data[max_index].translate_y+space, data[max_index].translate_z+space, data[max_index].rotate_z+3));
+		            data.push(new Item(data[max_index].translate_y+space, data[max_index].translate_z+space, data[max_index].rotate_z+angel));
         		}
 		        var item = document.createElement('li');
         		item.id = n;
