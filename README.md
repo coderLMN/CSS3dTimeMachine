@@ -9,7 +9,7 @@ In this version, browser compatibility are greatly improved. Now Chrome, Safari,
 
 Also it eliminated external library dependencies. To run a demo, all you need is just index.html.
 
-One more good point: when users want to move to another item , instead of clicking 'previous' or 'next' botton, now they can scroll mouse or click on an item they interested, or use arrow keys to navigate throw them.
+One more good point: when users want to move to another item , instead of clicking 'previous' or 'next' botton, now they can scroll mouse or click on an item they interested, or use arrow keys to navigate through them.
 
 That's it. One HTML file that utilizes CSS3 3D effects.
 
