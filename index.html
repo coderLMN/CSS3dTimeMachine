@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="An Demonstration of CSS3 3D Time Machine Effect, inspired by @joecritchley's demo: http://joecritchley.com/demos/time-machine/">
+		<meta name="author" content="coderLMN">
+		<title>An Demonstration of CSS3 3D Time Machine Effect</title>
+		<style>
+			* { margin: 0; padding: 0; list-style: none; -webkit-backface-visibility: hidden; backface-visibility: hidden;}
+			img { display: block; }
+			html, body { width: 100%; height: 100%; overflow: hidden; }
+			body { color: #fff; font-family: Arial, sans-serif; background-color: #333;}
+			.title { margin-left: 20px; margin-top: 10px;}
+			#view { width: 800px; margin: 0 auto; height: 1000px; left: -200px; position: relative; -webkit-perspective-origin: 100% 100%; perspective-origin: 100% 100%;  -webkit-perspective: 1200px; perspective: 1200px; left: -200px; }
+			#page { position: relative; width: 100%; height: 100%; margin-top: 25%; transform-style: preserve-3d;}
+			#page li { position: absolute; top: 0; left: 0; width: 800px; height: 600px; -webkit-transition: all 1s linear 0s;transition: all 1s linear 0s;}
+		</style>
+	</head>
+	<body>		
+		<div id="view">
+			<ul id="page"></ul>
+		</div>
+
+		<script>
+		    var space = -300;			// offset between neighboring items on Y and Z axis  
+        	var	pageSize = 10;			// number of items each page
+        	var angle = 3;
+		    var data = [];				// position of each item
+		    data.push(new Item(0, 0, 0));     //fill the first element data[0], so that the index == DOM li sequence
+		    
+		    var current_index = 1;		// the sequence number of current item
+		    var max_index = 0;			// the sequence number of the last item
+		    var page = document.getElementById('page');	// the DOM element where the items are placed
+
+		    function add(n){	// put a new item
+        		if(! data[n]){
+		            data.push(new Item(data[max_index].translate_y+space, data[max_index].translate_z+space, data[max_index].rotate_z+3));
+        		}
+		        var item = document.createElement('li');
+        		item.id = n;
+		        item.style.zIndex = (1000-n);
+		        item.style.opacity = 0;			// new item is invisible initially, will be displayed by animate() function
+		        item.style.display = 'block';
+        		item.style.backgroundColor = 'lightgreen';
+		        item.style.borderRadius = '10px';
+        		item.style.boxShadow = '5px -5px 3px #888888';
+		        item.onclick = function() {jumpTo(n)};			// if an item is clicked, it will move to the first place in the screen
+        		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='http://joecritchley.com/demos/time-machine/images/" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
+		        page.appendChild(item);
+		        max_index ++;
+    		}
+    		
+		    function Item(translate_y, translate_z, rotate_z){	// data structure for storing the positions
+		        this.translate_y = translate_y;
+        		this.translate_z = translate_z;
+		        this.rotate_z = rotate_z;
+    		}
+		    for(var n=1; n<pageSize+1; n++){			// put 10 items initially
+        		data.push(new Item(n*space, n*space, (n-1)*angle));
+		        add(n);
+		    };
+		    for(var n=1; n<pageSize+1; n++){
+        		animate(n, 0, 1);			// animate 10 items added
+    		};
+    		
+		    document.onkeydown = function(event) {
+		        if(event.keyCode == '37' || event.keyCode == '40') {    //left or down  --> previous
+        		    prev();
+        		}
+		        else if(event.keyCode == '39' || event.keyCode == '38') {    //right or up --> next
+        		    next();
+		        }
+		    };
+
+		    function shortCut(event){
+        		if(event.wheelDelta > 0){				// mouse wheel rolls forward
+		            next();
+        		}
+		        else if(event.wheelDelta < 0){
+        		    prev();								// mouse wheel rolls backward
+		        }
+		    }
+		    function shortCutFF(event) {				// only for Firefox, because it doesn't support onmousewheel event
+		    	if(event.detail < 0){					// mouse wheel rolls forward
+		            next();
+        		}
+		        else if(event.detail > 0){
+        		    prev();								// mouse wheel rolls backward
+		        }
+		    }
+			if ("onmousewheel" in document) {
+			    document.onmousewheel = shortCut;		// Webkit & IE
+			} else {
+			    document.addEventListener('DOMMouseScroll', shortCutFF, false);			// firefox
+			}
+
+		    function jumpTo(n){							// keep moving forward to show the n th item
+        		for(var i=current_index; i<n; i++){
+		            next();
+        		}
+		    }
+
+    		function animate(n, y, opacity) {
+		        var new_y = data[n].translate_y + y;
+        		var new_z = data[n].translate_z + y;
+		        var new_rz = data[n].rotate_z + angle*y/space;		// calculate new position of n th item
+
+        		var elementN = document.getElementById(n);
+				elementN.onclick = function() {jumpTo(n)};	
+				// animate n th item with CSS3 translate3d and rotate3d methods
+		        elementN.style.webkitTransform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
+        		elementN.style.transform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
+		        elementN.style.opacity = opacity;
+
+		        data[n].translate_y = new_y;
+		        data[n].translate_z = new_z;
+        		data[n].rotate_z = new_rz;						// save its new position
+		    }
+
+		    function prev() {
+        		if(current_index <= 1) return false;
+		        document.getElementById(current_index-1).style.opacity = 1;	// show last item
+        		current_index --;
+		        for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
+        		    animate(n, space, 0);
+        		};
+		        for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
+        		    animate(n, space, 1);
+        		};
+		        for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
+        		    animate(n, space, 0);
+		        };
+    		};
+
+		    function next() {
+        		if(current_index >= data.length || current_index==100) return false;
+		        document.getElementById(current_index).style.opacity = 0;	//hide current item
+        		current_index ++;
+		        if(current_index+pageSize-1>max_index && max_index<100){	// maximum 100 items allowed
+		            add(current_index + pageSize-1);		// load a new item if available
+		        }
+
+        		for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
+		            animate(n, -1*space, 0);
+        		};
+		        for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
+        		    animate(n, -1*space, 1);
+        		};
+		        for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
+        		    animate(n, -1*space, 0);
+		        };
+		    };
+		</script>
+	</body>
+</html>
