@@ -8,7 +8,7 @@
 		<meta name="author" content="coderLMN">
 		<title>An Demonstration of CSS3 3D Time Machine Effect</title>
 		<style>
-			
+			/* All the CSS 3 properties used in this demo */
 			* { margin: 0; padding: 0; list-style: none; -webkit-backface-visibility: hidden; backface-visibility: hidden;}
 			img { display: block; }
 			.back-img { position:absolute; left:0px; top:0px; z-index:-1;}
@@ -26,19 +26,19 @@
 			See the {<a href="https://github.com/coderLMN/CSS3dTimeMachine">Source Code</a>} or {<a href="http://coderlmn.github.io/CSS3dTimeMachine/">Demo</a>}
 		</h3>
 		
-		<audio autoplay loop>
+		<audio autoplay loop>   <!-- use HTML 5 audio tag to put an song here -->
   			<source src="http://cflc.xmu.edu.cn/linli/linli/student/2008/xiaojing/music/she.mp3" type="audio/mpeg">
 		</audio>
-		<div id="view">
-			<ul id="page"></ul>
+		<div id="view">         
+			<ul id="page"></ul> <!-- This is the place where all the slides will be added -->
 		</div>
 
 		<script>
 		    var space = -300;			// offset between neighboring items on Y and Z axis  
-        	var	pageSize = 10;			// number of items each page
-        	var angle = 3;
-		    var data = [];				// position of each item
-		    data.push(new Item(0, 0, 0));     //fill the first element data[0], so that the index == DOM li sequence
+        	    var	pageSize = 10;			// number of items each page
+        	    var angle = 3;
+		    var data = [];			// position of each item
+		    data.push(new Item(0, 0, 0));     	//fill the first element data[0], so that the index == DOM li sequence
 		    
 		    var current_index = 1;		// the sequence number of current item
 		    var max_index = 0;			// the sequence number of the last item
@@ -56,7 +56,7 @@
         		item.style.backgroundColor = 'lightgreen';
 		        item.style.borderRadius = '10px';
         		item.style.boxShadow = '5px -5px 3px #888888';
-		        item.onclick = function() {jumpTo(n)};			// if an item is clicked, it will move to the first place in the screen
+		        item.onclick = function() {jumpTo(n)};	// if an item is clicked, it will move to the first place in the screen
         		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='http://joecritchley.com/demos/time-machine/images/" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
 		        page.appendChild(item);
 		        max_index ++;
@@ -76,7 +76,7 @@
     		};
     		
 		    document.onkeydown = function(event) {
-		        if(event.keyCode == '37' || event.keyCode == '40') {    //left or down  --> previous
+		        if(event.keyCode == '37' || event.keyCode == '40') {         //left or down  --> previous
         		    prev();
         		}
 		        else if(event.keyCode == '39' || event.keyCode == '38') {    //right or up --> next
@@ -89,7 +89,7 @@
 		            next();
         		}
 		        else if(event.wheelDelta < 0){
-        		    prev();								// mouse wheel rolls backward
+        		    prev();						// mouse wheel rolls backward
 		        }
 		    }
 		    function shortCutFF(event) {				// only for Firefox, because it doesn't support onmousewheel event
@@ -97,16 +97,16 @@
 		            next();
         		}
 		        else if(event.detail > 0){
-        		    prev();								// mouse wheel rolls backward
+        		    prev();						// mouse wheel rolls backward
 		        }
 		    }
 			if ("onmousewheel" in document) {
 			    document.onmousewheel = shortCut;		// Webkit & IE
 			} else {
-			    document.addEventListener('DOMMouseScroll', shortCutFF, false);			// firefox
+			    document.addEventListener('DOMMouseScroll', shortCutFF, false);	// firefox
 			}
 
-		    function jumpTo(n){							// keep moving forward to show the n th item
+		    function jumpTo(n){					// keep moving forward to show the n th item
         		for(var i=current_index; i<n; i++){
 		            next();
         		}
@@ -115,18 +115,18 @@
     		function animate(n, y, opacity) {
 		        var new_y = data[n].translate_y + y;
         		var new_z = data[n].translate_z + y;
-		        var new_rz = data[n].rotate_z + angle*y/space;		// calculate new position of n th item
+		        var new_rz = data[n].rotate_z + angle*y/space;	// calculate new position of n th item
 
         		var elementN = document.getElementById(n);
-				elementN.onclick = function() {jumpTo(n)};	
-				// animate n th item with CSS3 translate3d and rotate3d methods
+			elementN.onclick = function() {jumpTo(n)};	
+			// animate n th item with CSS3 translate3d and rotate3d methods
 		        elementN.style.webkitTransform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
         		elementN.style.transform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
 		        elementN.style.opacity = opacity;
 
 		        data[n].translate_y = new_y;
 		        data[n].translate_z = new_z;
-        		data[n].rotate_z = new_rz;						// save its new position
+        		data[n].rotate_z = new_rz;			// save its new position
 		    }
 
 		    function prev() {
