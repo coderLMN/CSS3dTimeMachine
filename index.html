@@ -16,7 +16,7 @@
 			.title { margin-left: 20px; margin-top: 10px;}
 			#view { width: 800px; margin: 0 auto; height: 1000px; left: -200px; position: relative; -webkit-transform-style: preserve-3d; transform-style: preserve-3d;}
 			#page { position: relative; width: 100%; height: 100%; margin-top: 25%; -webkit-perspective-origin: 100% 100%; perspective-origin: 100% 100%;  -webkit-perspective: 1200px; perspective: 1200px;}
-			#page li { position: absolute; top: 0; left: 0; width: 800px; height: 600px; -webkit-transition: all 1s linear 0s;transition: all 1s linear 0s;}
+			#page li { position: absolute; top: 0; left: 0; width: 800px; height: 600px; -webkit-transition: all 1s linear 0s;transition: all 1s linear 0s; display: block; background-color: lightgreen;border-radius: 10px;box-shadow: 5px -5px 3px #888888; opacity: 0;}
 		</style>
 	</head>
 	<body>
@@ -49,13 +49,9 @@
 		        var item = document.createElement('li');
         		item.id = n;
 		        item.style.zIndex = (1000-n);
-		        item.style.opacity = 0;			// new item is invisible initially, will be displayed by animate() function
-		        item.style.display = 'block';
-        		item.style.backgroundColor = 'lightgreen';
-		        item.style.borderRadius = '10px';
-        		item.style.boxShadow = '5px -5px 3px #888888';
+//		        item.style.opacity = 0;			// new item is invisible initially, will be displayed by animate() function
 		        item.onclick = function() {jumpTo(n)};			// if an item is clicked, it will move to the first place in the screen
-        		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='http://joecritchley.com/demos/time-machine/images/" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
+        		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
 		        page.appendChild(item);
 		        max_index ++;
     		}
@@ -68,10 +64,10 @@
 		    for(var n=1; n<pageSize+1; n++){			// put 10 items initially
         		data.push(new Item(n*space, n*space, (n-1)*angle));
 		        add(n);
-		    };
+		    }
 		    for(var n=1; n<pageSize+1; n++){
         		animate(n, 0, 1);			// animate 10 items added
-    		};
+    		}
     		
 		    document.onkeydown = function(event) {
 		        if(event.keyCode == '37' || event.keyCode == '40') {    //left or down  --> previous
@@ -111,55 +107,65 @@
 		    }
 
     		function animate(n, y, opacity) {
-		        var new_y = data[n].translate_y + y;
-        		var new_z = data[n].translate_z + y;
-		        var new_rz = data[n].rotate_z + angle*y/space;		// calculate new position of n th item
+				if(n<61) {
+					var new_y = data[n].translate_y + y;
+					var new_z = data[n].translate_z + y;
+					var new_rz = data[n].rotate_z + angle*y/space;		// calculate new position of n th item
 
-        		var elementN = document.getElementById(n);
-				elementN.onclick = function() {jumpTo(n)};	
-				// animate n th item with CSS3 translate3d and rotate3d methods
-		        elementN.style.webkitTransform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
-        		elementN.style.transform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
-		        elementN.style.opacity = opacity;
+					var elementN = document.getElementById(n);
+					elementN.onclick = function() {jumpTo(n)};
+					// animate n th item with CSS3 translate3d and rotate3d methods
+					elementN.style.webkitTransform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
+					elementN.style.transform = 'translateX('+ (-0.3*new_y) + 'px) translateY('+ new_y + 'px) translateZ(' + new_z + 'px) rotateZ(' + new_rz + 'deg)';
+					elementN.style.opacity = opacity;
 
-		        data[n].translate_y = new_y;
-		        data[n].translate_z = new_z;
-        		data[n].rotate_z = new_rz;						// save its new position
+					data[n].translate_y = new_y;
+					data[n].translate_z = new_z;
+					data[n].rotate_z = new_rz;						// save its new position
+				}
 		    }
 
 		    function prev() {
-        		if(current_index <= 1) return false;
-		        document.getElementById(current_index-1).style.opacity = 1;	// show last item
-        		current_index --;
-		        for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
-        		    animate(n, space, 0);
-        		};
-		        for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
-        		    animate(n, space, 1);
-        		};
-		        for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
-        		    animate(n, space, 0);
-		        };
-    		};
+        		if(current_index <= 1) {
+					return false;
+				}
+		        else {
+					document.getElementById(current_index-1).style.opacity = 1;	// show last item
+					current_index --;
+					for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
+						animate(n, space, 0);
+					}
+					for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
+						animate(n, space, 1);
+					}
+					for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
+						animate(n, space, 0);
+					}
+				}
+    		}
 
 		    function next() {
-        		if(current_index >= data.length || current_index==100) return false;
-		        document.getElementById(current_index).style.opacity = 0;	//hide current item
-        		current_index ++;
-		        if(current_index+pageSize-1>max_index && max_index<100){	// maximum 100 items allowed
-		            add(current_index + pageSize-1);		// load a new item if available
-		        }
+        		if(current_index >= data.length || current_index>=60) {
+					return false;
+				}
+		        else{
+					document.getElementById(current_index).style.opacity = 0;	//hide current item
+					current_index ++;
+					if(current_index+pageSize-1>max_index && max_index<60){	// maximum 60 items allowed
+						add(current_index + pageSize -1);		// load a new item if available
+					}
 
-        		for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
-		            animate(n, -1*space, 0);
-        		};
-		        for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
-        		    animate(n, -1*space, 1);
-        		};
-		        for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
-        		    animate(n, -1*space, 0);
-		        };
-		    };
+					for(var n=1; n<current_index; n++){		// update the positions of previous invisible items
+						animate(n, -1*space, 0);
+					}
+					for(var n=current_index; n<current_index+pageSize; n++){	// update the positions of current visible items
+						animate(n, -1*space, 1);
+					}
+					for(var n=current_index+pageSize; n<=max_index; n++){	// update the positions of next invisible items
+						animate(n, -1*space, 0);
+					}
+				}
+		    }
 		</script>
 	</body>
 </html>
