@@ -52,7 +52,7 @@
 		item.style.zIndex = (1000-n);
 //		        item.style.opacity = 0;			// new item is invisible initially, will be displayed by animate() function
 		item.onclick = function() {jumpTo(n)};			// if an item is clicked, it will move to the first place in the screen
-		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
+		item.innerHTML = "<h2 class='title'>Item No. " + n + "</h2><img src='http://joecritchley.com/demos/time-machine/images/" + (n%6 +1) +".jpg' width='800'><h4 class='title'>Text content is put here......................... for Item No." + n + ".</h4>";
 		page.appendChild(item);
 		max_index ++;
 	}
