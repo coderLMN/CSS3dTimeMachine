@@ -7,7 +7,7 @@ This version is inspired by @joecritchley's demo: http://joecritchley.com/demos/
 
 In my version, browser compatibility are greatly improved. Now Chrome, Safari, Opera, Firefox, and IE(version >9) are supported.
 
-Also it eliminated external library dependencies. To run a demo, all you need is just index.html.
+Also it eliminated external library dependencies. To run a demo, all you need is just [index.html](https://github.com/coderLMN/CSS3dTimeMachine/blob/master/index.html).
 
 One more good point: when users want to move to another item , instead of clicking 'previous' or 'next' botton, now they can scroll mouse or click on an item they interested, or use arrow keys to navigate through them.
 
