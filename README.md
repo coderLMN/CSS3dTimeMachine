@@ -11,7 +11,7 @@ Also it eliminated external library dependencies. To run a demo, all you need is
 
 One more good point: when users want to move to another item , instead of clicking 'previous' or 'next' botton, now they can scroll mouse or click on an item they interested, or use arrow keys to navigate through them.
 
-That's it. One HTML file that utilizes CSS3 3D effects.
+That's it. One HTML file that demostrates CSS3 3D effects.
 
-You may try it here: http://coderlmn.github.io/CSS3dTimeMachine/ . Enjoy!
+You may try it here: http://coderlmn.github.io/CSS3dTimeMachine/ . 
 
